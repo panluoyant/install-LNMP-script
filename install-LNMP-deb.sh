@@ -42,7 +42,7 @@ cd ~/source
 
 # 自动安装编译依赖
 echo -e "\e[1;34m安装编译依赖\e[0m"
-  apt-get install -y gcc g++ make wget tar cmake libpcre3-dev zlib1g-dev
+  apt-get install -y gcc g++ make wget tar cmake libpcre3-dev zlib1g-dev gcc-8 g++-8
 
 # 检查并备份 Nginx
 if [ -d "/usr/local/nginx" ]; then
