@@ -45,16 +45,47 @@ echo -e "\e[1;34m安装编译依赖\e[0m"
 yum -y install gcc gcc-c++ make wget tar cmake pcre pcre-devel zlib-devel
 #mysql的依赖
 yum -y install gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck gcc-toolset-12-annobin-plugin-gcc
+#安装GMP
+wget https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
+tar -xvf gmp-6.1.2.tar.bz2
+cd gmp-6.1.2
+./configure --prefix=/usr/local
+make
+sudo make install
+make check
+cd ..
+#安装MPFR
+#wget https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.gz
+wget https://mirrors.huaweicloud.com/gnu/mpfr/mpfr-4.2.1.tar.gz
+tar -zxvf mpfr-4.2.1.tar.gz
+cd mpfr-4.2.1
+./configure --prefix=/usr/local --with-gmp=/usr/local
+make
+sudo make install
+cd ..
+#安装MPC
+wget https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz 
+tar -zxvf mpc-1.3.1.tar.gz
+cd mpc-1.3.1
+./configure --prefix=/usr/local --with-gmp=/usr/local --with-mpfr=/usr/local
+make
+sudo make install
+cd ..
+#刷新动态库
+sudo sh -c "echo '/usr/local/lib' > /etc/ld.so.conf.d/local_libs.conf"
+sudo ldconfig
+
 #安装gcc12
 sudo yum install -y wget tar gcc gcc-c++ make gmp-devel mpfr-devel libmpc-devel
 cd /opt
-wget http://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.gz
-tar -zxvf gcc-12.2.0.tar.gz
-cd gcc-12.2.0
+#wget http://ftp.gnu.org/gnu/gcc/gcc-12.3.0/gcc-12.3.0.tar.gz
+wget https://mirrors.huaweicloud.com/gnu/gcc/gcc-12.3.0/gcc-12.3.0.tar.gz
+tar -zxvf gcc-12.3.0.tar.gz
+cd gcc-12.3.0
 mkdir build
 cd build
-../configure --prefix=/usr/local/gcc-12 --enable-languages=c,c++
-make -j$(nproc)
+../configure --prefix=/usr/local/gcc-12 --enable-languages=c,c++  --disable-multilib
+make -j$(nproc -all)
 sudo make install
 export PATH=/usr/local/gcc-12/bin:$PATH
 source ~/.bashrc
