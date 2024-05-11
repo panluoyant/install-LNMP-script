@@ -43,6 +43,21 @@ cd ~/source
 # 自动安装编译依赖
 echo -e "\e[1;34m安装编译依赖\e[0m"
 yum -y install gcc gcc-c++ make wget tar cmake pcre pcre-devel zlib-devel
+#mysql的依赖
+yum -y install gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck gcc-toolset-12-annobin-plugin-gcc
+#安装gcc12
+sudo yum install -y wget tar gcc gcc-c++ make gmp-devel mpfr-devel libmpc-devel
+cd /opt
+wget http://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.gz
+tar -zxvf gcc-12.2.0.tar.gz
+cd gcc-12.2.0
+mkdir build
+cd build
+../configure --prefix=/usr/local/gcc-12 --enable-languages=c,c++
+make -j$(nproc)
+sudo make install
+export PATH=/usr/local/gcc-12/bin:$PATH
+source ~/.bashrc
 
 # 检查并备份 Nginx
 if [ -d "/usr/local/nginx" ]; then
