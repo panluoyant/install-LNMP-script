@@ -42,15 +42,13 @@ cd ~/source
 
 # 自动安装编译依赖
 echo -e "\e[1;34m安装编译依赖\e[0m"
-yum -y install gcc gcc-c++ make wget tar cmake pcre pcre-devel zlib-devel
-#mysql的依赖
-yum -y install gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck gcc-toolset-12-annobin-plugin-gcc
+yum -y install gcc gcc-c++ make wget tar cmake pcre pcre-devel zlib-devel ca-certificates
 #安装GMP
 wget https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
 tar -xvf gmp-6.1.2.tar.bz2
 cd gmp-6.1.2
 ./configure --prefix=/usr/local
-make
+make -j$(nproc -all)
 sudo make install
 make check
 cd ..
@@ -60,7 +58,7 @@ wget https://mirrors.huaweicloud.com/gnu/mpfr/mpfr-4.2.1.tar.gz
 tar -zxvf mpfr-4.2.1.tar.gz
 cd mpfr-4.2.1
 ./configure --prefix=/usr/local --with-gmp=/usr/local
-make
+make -j$(nproc -all)
 sudo make install
 cd ..
 #安装MPC
@@ -68,7 +66,7 @@ wget https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz
 tar -zxvf mpc-1.3.1.tar.gz
 cd mpc-1.3.1
 ./configure --prefix=/usr/local --with-gmp=/usr/local --with-mpfr=/usr/local
-make
+make -j$(nproc -all)
 sudo make install
 cd ..
 #刷新动态库
@@ -89,6 +87,40 @@ make -j$(nproc -all)
 sudo make install
 export PATH=/usr/local/gcc-12/bin:$PATH
 source ~/.bashrc
+export LD_LIBRARY_PATH=/usr/local/gcc-8/lib64:$LD_LIBRARY_PATH
+source ~/.bashrc
+
+#安装CMAKE
+#!/bin/bash
+
+# 卸载旧版本的 CMake
+sudo yum remove -y cmake
+# 安装必要的依赖
+sudo yum install -y make openssl-devel zlib-devel curl-devel
+# 定义安装的 CMake 版本
+CMAKE_VERSION=3.24.2
+CMAKE_BUILD_DIR=/tmp/cmake-build
+# 创建一个临时目录进行编译
+mkdir -p $CMAKE_BUILD_DIR
+cd $CMAKE_BUILD_DIR
+# 下载 CMake 源代码
+curl -O https://cmake.org/files/v3.24/cmake-$CMAKE_VERSION.tar.gz
+tar -zxvf cmake-$CMAKE_VERSION.tar.gz
+cd cmake-$CMAKE_VERSION
+# 编译并安装
+./bootstrap --prefix=/usr/local
+make -j$(nproc)  # 自动检测可用核心数
+sudo make install
+# 清理安装文件
+cd ~
+rm -rf $CMAKE_BUILD_DIR
+# 显示安装的版本
+cmake --version
+
+
+
+#mysql的依赖
+yum -y install gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck gcc-toolset-12-annobin-plugin-gcc
 
 # 检查并备份 Nginx
 if [ -d "/usr/local/nginx" ]; then
