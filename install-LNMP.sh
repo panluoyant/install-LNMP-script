@@ -44,8 +44,9 @@ cd ~/source
 echo -e "\e[1;34m安装编译依赖\e[0m"
 yum -y install gcc gcc-c++ make wget tar cmake pcre pcre-devel zlib-devel ca-certificates
 #安装GMP
-wget https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
-tar -xvf gmp-6.1.2.tar.bz2
+#wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.bz2
+wget https://mirrors.huaweicloud.com/gnu/gmp/gmp-6.3.0.tar.gz
+tar -xvf gmp-6.3.0.tar.bz2
 cd gmp-6.1.2
 ./configure --prefix=/usr/local
 make -j$(nproc -all)
@@ -62,7 +63,8 @@ make -j$(nproc -all)
 sudo make install
 cd ..
 #安装MPC
-wget https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz 
+#wget https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz 
+wget https://mirrors.huaweicloud.com/gnu/mpc/mpc-1.3.1.tar.gz
 tar -zxvf mpc-1.3.1.tar.gz
 cd mpc-1.3.1
 ./configure --prefix=/usr/local --with-gmp=/usr/local --with-mpfr=/usr/local
