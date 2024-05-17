@@ -39,13 +39,14 @@ MYSQL_VERSION=${MYSQL_VERSIONS[$MYSQL_CHOICE-1]}
 echo -e "\e[1;34m创建临时目录\e[0m"
 mkdir -p ~/source
 cd ~/source
+#安装文件多线程下载工具
 
 # 自动安装编译依赖
 echo -e "\e[1;34m安装编译依赖\e[0m"
-yum -y install gcc gcc-c++ make wget tar cmake pcre pcre-devel zlib-devel ca-certificates
+yum -y install make pcre pcre-devel zlib-devel ca-certificates
 #安装GMP
-#wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.bz2
-wget https://mirrors.huaweicloud.com/gnu/gmp/gmp-6.3.0.tar.gz
+#dl https://gmplib.org/download/gmp/gmp-6.3.0.tar.bz2
+dl https://mirrors.huaweicloud.com/gnu/gmp/gmp-6.3.0.tar.gz
 tar -xvf gmp-6.3.0.tar.bz2
 cd gmp-6.1.2
 ./configure --prefix=/usr/local
@@ -54,8 +55,8 @@ sudo make install
 make check
 cd ..
 #安装MPFR
-#wget https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.gz
-wget https://mirrors.huaweicloud.com/gnu/mpfr/mpfr-4.2.1.tar.gz
+#dl https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.gz
+dl https://mirrors.huaweicloud.com/gnu/mpfr/mpfr-4.2.1.tar.gz
 tar -zxvf mpfr-4.2.1.tar.gz
 cd mpfr-4.2.1
 ./configure --prefix=/usr/local --with-gmp=/usr/local
@@ -63,8 +64,8 @@ make -j$(nproc -all)
 sudo make install
 cd ..
 #安装MPC
-#wget https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz 
-wget https://mirrors.huaweicloud.com/gnu/mpc/mpc-1.3.1.tar.gz
+#dl https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz 
+dl https://mirrors.huaweicloud.com/gnu/mpc/mpc-1.3.1.tar.gz
 tar -zxvf mpc-1.3.1.tar.gz
 cd mpc-1.3.1
 ./configure --prefix=/usr/local --with-gmp=/usr/local --with-mpfr=/usr/local
@@ -76,10 +77,10 @@ sudo sh -c "echo '/usr/local/lib' > /etc/ld.so.conf.d/local_libs.conf"
 sudo ldconfig
 
 #安装gcc12
-sudo yum install -y wget tar gcc gcc-c++ make gmp-devel mpfr-devel libmpc-devel
+sudo yum install -y tar gcc gcc-c++ make
 cd /opt
-#wget http://ftp.gnu.org/gnu/gcc/gcc-12.3.0/gcc-12.3.0.tar.gz
-wget https://mirrors.huaweicloud.com/gnu/gcc/gcc-12.3.0/gcc-12.3.0.tar.gz
+#dl http://ftp.gnu.org/gnu/gcc/gcc-12.3.0/gcc-12.3.0.tar.gz
+dl https://mirrors.huaweicloud.com/gnu/gcc/gcc-12.3.0/gcc-12.3.0.tar.gz
 tar -zxvf gcc-12.3.0.tar.gz
 cd gcc-12.3.0
 mkdir build
@@ -89,12 +90,10 @@ make -j$(nproc -all)
 sudo make install
 export PATH=/usr/local/gcc-12/bin:$PATH
 source ~/.bashrc
-export LD_LIBRARY_PATH=/usr/local/gcc-8/lib64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/gcc-12/lib64:$LD_LIBRARY_PATH
 source ~/.bashrc
 
 #安装CMAKE
-#!/bin/bash
-
 # 卸载旧版本的 CMake
 sudo yum remove -y cmake
 # 安装必要的依赖
@@ -106,7 +105,7 @@ CMAKE_BUILD_DIR=/tmp/cmake-build
 mkdir -p $CMAKE_BUILD_DIR
 cd $CMAKE_BUILD_DIR
 # 下载 CMake 源代码
-curl -O https://cmake.org/files/v3.24/cmake-$CMAKE_VERSION.tar.gz
+dl https://cmake.org/files/v3.24/cmake-$CMAKE_VERSION.tar.gz
 tar -zxvf cmake-$CMAKE_VERSION.tar.gz
 cd cmake-$CMAKE_VERSION
 # 编译并安装
@@ -122,7 +121,7 @@ cmake --version
 
 
 #mysql的依赖
-yum -y install gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck gcc-toolset-12-annobin-plugin-gcc
+#yum -y install gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-binutils gcc-toolset-12-annobin-annocheck gcc-toolset-12-annobin-plugin-gcc
 
 # 检查并备份 Nginx
 if [ -d "/usr/local/nginx" ]; then
@@ -132,7 +131,7 @@ fi
 
 # 下载 Nginx 源代码
 echo -e "\e[1;34m下载 Nginx 源代码\e[0m"
-wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
+dl https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 tar -zxvf nginx-$NGINX_VERSION.tar.gz
 cd nginx-$NGINX_VERSION
 
@@ -176,7 +175,7 @@ fi
 
 # 下载 PHP 源代码
 echo -e "\e[1;34m下载 PHP 源代码\e[0m"
-wget https://www.php.net/distributions/php-$PHP_VERSION.tar.gz
+dl https://www.php.net/distributions/php-$PHP_VERSION.tar.gz
 tar -zxvf php-$PHP_VERSION.tar.gz
 cd php-$PHP_VERSION
 
@@ -200,7 +199,7 @@ fi
 
 # 下载 MySQL 源代码
 echo -e "\e[1;34m下载 MySQL 源代码\e[0m"
-wget https://dev.mysql.com/get/Downloads/MySQL-$MYSQL_VERSION/mysql-$MYSQL_VERSION.tar.gz
+dl https://dev.mysql.com/get/Downloads/MySQL-$MYSQL_VERSION/mysql-$MYSQL_VERSION.tar.gz
 tar -zxvf mysql-$MYSQL_VERSION.tar.gz
 cd mysql-$MYSQL_VERSION
 
