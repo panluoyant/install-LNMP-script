@@ -60,7 +60,7 @@ dl https://mirrors.huaweicloud.com/gnu/mpfr/mpfr-4.2.1.tar.gz
 tar -zxvf mpfr-4.2.1.tar.gz
 cd mpfr-4.2.1
 ./configure --prefix=/usr/local --with-gmp=/usr/local
-make -j$(nproc -all)
+make -j$(nproc)
 sudo make install
 cd ..
 #安装MPC
@@ -69,7 +69,7 @@ dl https://mirrors.huaweicloud.com/gnu/mpc/mpc-1.3.1.tar.gz
 tar -zxvf mpc-1.3.1.tar.gz
 cd mpc-1.3.1
 ./configure --prefix=/usr/local --with-gmp=/usr/local --with-mpfr=/usr/local
-make -j$(nproc -all)
+make -j$(nproc)
 sudo make install
 cd ..
 #刷新动态库
@@ -86,7 +86,7 @@ cd gcc-12.3.0
 mkdir build
 cd build
 ../configure --prefix=/usr/local/gcc-12 --enable-languages=c,c++  --disable-multilib
-make -j$(nproc -all)
+make -j$(nproc)
 sudo make install
 export PATH=/usr/local/gcc-12/bin:$PATH
 source ~/.bashrc
