@@ -50,7 +50,7 @@ dl https://mirrors.huaweicloud.com/gnu/gmp/gmp-6.3.0.tar.gz
 tar -xvf gmp-6.3.0.tar.bz2
 cd gmp-6.1.2
 ./configure --prefix=/usr/local
-make -j$(nproc -all)
+make -j$(nproc)
 sudo make install
 make check
 cd ..
